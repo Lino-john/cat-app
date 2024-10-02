@@ -1,14 +1,5 @@
 import axios from "axios";
 import api from "./api";
-// export const fetchCats = async () => {
-//   try {
-//     const response = await api.get("/images");
-//     return response.data;
-//   } catch (err: any) {
-//     console.error("Failed to fetch cats:", err);
-//     throw err;
-//   }
-// };
 
 export const voteCat = async (imageId: string, voteValue: number) => {
   try {
