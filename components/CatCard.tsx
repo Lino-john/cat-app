@@ -1,33 +1,53 @@
 import React from "react";
-import { View, Text, Image, Button, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { styles } from "./CatCard.styles";
+import Button from "./Button";
 
-export default function CatCard({ cat, onVote, onFavorite }) {
-  console.log("CatCard", cat);
+interface Cat {
+  id: string;
+  url: string;
+  score: number;
+  isFavorite: boolean;
+}
+
+interface CatCardProps {
+  cat: Cat;
+  onVote: (catId: string, voteValue: number) => void;
+  onFavorite: (catId: string, isFavorite: boolean) => void;
+}
+
+const CatCard: React.FC<CatCardProps> = ({ cat, onVote, onFavorite }) => {
   return (
     <View style={styles.card}>
       <Image source={{ uri: cat.url }} style={styles.image} />
-      <Text>Score: {cat.score}</Text>
-      <Button title="Vote Up" onPress={() => onVote(cat.id, 1)} />
-      <Button title="Vote Down" onPress={() => onVote(cat.id, -1)} />
-      <Button
-        title={cat.isFavorite ? "Unfavorite" : "Favorite"}
-        onPress={() => onFavorite(cat.id, cat.isFavorite)}
-      />
+      <View style={styles.infoContainer}>
+        <Text style={styles.score}>Score: {cat.score}</Text>
+        <TouchableOpacity onPress={() => onFavorite(cat.id, cat.isFavorite)}>
+          <FontAwesome
+            name={cat.isFavorite ? "heart" : "heart-o"}
+            size={24}
+            color={cat.isFavorite ? "red" : "gray"}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Vote up"
+          onPress={() => onVote(cat.id, 1)}
+          type="primary"
+          textColor="#fff"
+        />
+        <Button
+          title="Vote down"
+          onPress={() => onVote(cat.id, -1)}
+          type="secondary"
+          textColor="#fff"
+        />
+      </View>
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  card: {
-    marginBottom: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-  },
-  image: {
-    width: 150,
-    height: 150,
-    borderRadius: 5,
-  },
-});
+export default CatCard;
